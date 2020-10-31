@@ -83,8 +83,12 @@ def filterchain(
     foreign_key_model_name,
     foreign_key_field_name,
     value,
+    child_app=None,
+    child_model=None,
+    child_field=None,
     manager=None,
 ):
+
     model_class = get_model(app, model)
     m2m = is_m2m(model_class, field)
     keywords = get_keywords(field, value, m2m=m2m)
@@ -103,7 +107,21 @@ def filterchain(
     limit_choices_to = get_limit_choices_to(
         foreign_key_app_name, foreign_key_model_name, foreign_key_field_name
     )
+
     queryset = get_queryset(model_class, manager, limit_choices_to)
+
+
+    # filter by a foreign key within the relationship (only ForeignKey not M2M)
+    if child_app and child_model and child_field:
+        child_model_class = get_model(child_app, child_model)
+        child_queryset = get_queryset(child_model_class, None, None)
+        child_keywords = get_keywords("pk", value, m2m=False)
+
+        get_child = do_filter(child_queryset, child_keywords)
+        get_child_model = getattr(get_child[0], child_field, None)
+
+        keywords = get_keywords(child_field, get_child_model.id, m2m=False)
+
 
     results = do_filter(queryset, keywords)
 

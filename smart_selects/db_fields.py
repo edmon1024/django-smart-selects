@@ -163,6 +163,9 @@ class ChainedForeignKey(IntrospectiveFieldMixin, ForeignKey):
         self,
         to,
         chained_field=None,
+        chained_child_app=None,
+        chained_child_model=None,
+        chained_child_field=None,
         chained_model_field=None,
         show_all=False,
         auto_choose=False,
@@ -206,6 +209,9 @@ class ChainedForeignKey(IntrospectiveFieldMixin, ForeignKey):
 
         """
         self.chained_field = chained_field
+        self.chained_child_app = chained_child_app
+        self.chained_child_model = chained_child_model
+        self.chained_child_field = chained_child_field
         self.chained_model_field = chained_model_field
         self.show_all = show_all
         self.auto_choose = auto_choose
@@ -223,6 +229,9 @@ class ChainedForeignKey(IntrospectiveFieldMixin, ForeignKey):
         # Maps attribute names to their default kwarg values.
         defaults = {
             "chained_field": None,
+            "chained_child_app": None,
+            "chained_child_model": None,
+            "chained_child_field": None,
             "chained_model_field": None,
             "show_all": False,
             "auto_choose": False,
@@ -233,6 +242,9 @@ class ChainedForeignKey(IntrospectiveFieldMixin, ForeignKey):
         # Maps attribute names to their __init__ kwarg names.
         attr_to_kwarg_names = {
             "chained_field": "chained_field",
+            "chained_child_app": "chained_child_app",
+            "chained_child_model": "chained_child_model",
+            "chained_child_field": "chained_child_field",
             "chained_model_field": "chained_model_field",
             "show_all": "show_all",
             "auto_choose": "auto_choose",
@@ -275,6 +287,9 @@ class ChainedForeignKey(IntrospectiveFieldMixin, ForeignKey):
             "to_app_name": self.to_app_name,
             "to_model_name": self.to_model_name,
             "chained_field": self.chained_field,
+            "chained_child_app": self.chained_child_app,
+            "chained_child_model": self.chained_child_model,
+            "chained_child_field": self.chained_child_field,
             "chained_model_field": self.chained_model_field,
             "show_all": self.show_all,
             "auto_choose": self.auto_choose,

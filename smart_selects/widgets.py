@@ -63,6 +63,9 @@ class ChainedSelect(JqueryMediaMixin, Select):
         to_app_name,
         to_model_name,
         chained_field,
+        chained_child_app,
+        chained_child_model,
+        chained_child_field,
         chained_model_field,
         foreign_key_app_name,
         foreign_key_model_name,
@@ -78,6 +81,9 @@ class ChainedSelect(JqueryMediaMixin, Select):
         self.to_app_name = to_app_name
         self.to_model_name = to_model_name
         self.chained_field = chained_field
+        self.chained_child_app = chained_child_app
+        self.chained_child_model = chained_child_model
+        self.chained_child_field = chained_child_field
         self.chained_model_field = chained_model_field
         self.show_all = show_all
         self.auto_choose = auto_choose
@@ -114,15 +120,28 @@ class ChainedSelect(JqueryMediaMixin, Select):
                 view_name = "chained_filter"
         else:
             view_name = self.view_name
-        kwargs = {
+        k1 = {
             "app": self.to_app_name,
             "model": self.to_model_name,
             "field": self.chained_model_field,
+        }
+        k2 = {
             "foreign_key_app_name": self.foreign_key_app_name,
             "foreign_key_model_name": self.foreign_key_model_name,
             "foreign_key_field_name": self.foreign_key_field_name,
             "value": "1",
         }
+
+        if self.chained_child_app and self.chained_child_model and self.chained_child_field:
+            k3 = { 
+                "child_app": self.chained_child_app,
+                "child_model": self.chained_child_model,
+                "child_field": self.chained_child_field,
+            }
+            kwargs = dict(k1, **k3, **k2)
+        else:
+            kwargs = dict(k1, **k2)
+
         if self.manager is not None:
             kwargs.update({"manager": self.manager})
         url = URL_PREFIX + ("/".join(reverse(view_name, kwargs=kwargs).split("/")[:-2]))

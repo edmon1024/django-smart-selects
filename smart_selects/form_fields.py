@@ -13,6 +13,9 @@ class ChainedModelChoiceField(ModelChoiceField):
         to_app_name,
         to_model_name,
         chained_field,
+        chained_child_app,
+        chained_child_model,
+        chained_child_field,
         chained_model_field,
         foreign_key_app_name,
         foreign_key_model_name,
@@ -32,6 +35,9 @@ class ChainedModelChoiceField(ModelChoiceField):
                 to_app_name,
                 to_model_name,
                 chained_field,
+                chained_child_app,
+                chained_child_model,
+                chained_child_field,
                 chained_model_field,
                 foreign_key_app_name,
                 foreign_key_model_name,
@@ -43,6 +49,7 @@ class ChainedModelChoiceField(ModelChoiceField):
                 view_name,
             ),
         }
+ 
         defaults.update(kwargs)
         if "queryset" not in kwargs:
             queryset = get_model(to_app_name, to_model_name).objects.all()
